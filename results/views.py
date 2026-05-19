@@ -11,7 +11,15 @@ class ResultCreateView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+
+        quiz = serializer.validated_data['quiz']
+
+        max_score = sum(q.score for q in quiz.questions.all())
+
+        serializer.save(
+            user=self.request.user,
+            max_score=max_score
+        )
 
 
 class MyResultsView(generics.ListAPIView):
@@ -20,6 +28,5 @@ class MyResultsView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Result.objects.filter(
-            user=self.request.user
-        )
+
+        return Result.objects.filter(user=self.request.user)

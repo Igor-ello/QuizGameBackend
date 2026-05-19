@@ -22,12 +22,9 @@ class Result(models.Model):
 
     score = models.IntegerField()
 
-    completed_at = models.DateTimeField(
-        auto_now_add=True
-    )
+    max_score = models.IntegerField(default=0)
+
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['-completed_at']
-
-    def __str__(self):
-        return f'{self.user.username} - {self.quiz.title}'
+        ordering = ['-created_at']

@@ -1,5 +1,4 @@
 from django.contrib import admin
-
 from .models import Result
 
 
@@ -11,12 +10,13 @@ class ResultAdmin(admin.ModelAdmin):
         'user',
         'quiz',
         'score',
-        'completed_at'
+        'max_score',
+        'created_at'
     ]
 
     list_filter = [
         'quiz',
-        'completed_at'
+        'created_at'
     ]
 
     search_fields = [
@@ -24,4 +24,4 @@ class ResultAdmin(admin.ModelAdmin):
         'quiz__title'
     ]
 
-    ordering = ['-completed_at']
+    ordering = ['-created_at']

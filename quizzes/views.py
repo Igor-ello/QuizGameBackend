@@ -1,17 +1,16 @@
-from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from .models import Quiz
 from .serializers import QuizSerializer
 
 
-class QuizListView(generics.ListAPIView):
-    queryset = Quiz.objects.all()
-    serializer_class = QuizSerializer
-    permission_classes = [IsAuthenticated]
+class QuizViewSet(viewsets.ModelViewSet):
 
-
-class QuizDetailView(generics.RetrieveAPIView):
-    queryset = Quiz.objects.all()
+    queryset = Quiz.objects.all().prefetch_related('questions', 'tags')
     serializer_class = QuizSerializer
-    permission_classes = [IsAuthenticated]
+
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
